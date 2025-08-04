@@ -21,7 +21,9 @@ app.use(express.json());
 
 
 
-app.get("/",async(req,res)=>{
+app.post("/",async(req,res)=>{
+  console.log(req.body);
+  
   return res.json({message:"hiiii"})
 })
 
@@ -32,5 +34,5 @@ app.get("/",async(req,res)=>{
 
 mongoConnect()//monogDB se connect
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(` app listening on port ${port}`)
 })

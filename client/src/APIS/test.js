@@ -7,7 +7,7 @@ const server = axios.create({
 
 export const Test=async()=>{
     try {
-        const res=await server.get("/",{message:"I love you"});
+        const res=await server.post("/",{message:"I love you"});
     } catch (error) {
         console.log(error);
     }
