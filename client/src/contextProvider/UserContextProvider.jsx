@@ -21,7 +21,7 @@ const UserContextProvider = ({ children }) => {
           profilePic: firebaseUser.photoURL || "",
         });
 
-       //.......................extra data??
+       //.......................extra data fetch
 
       } else {
         setUser(null);
