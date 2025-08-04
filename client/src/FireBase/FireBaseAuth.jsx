@@ -1,4 +1,4 @@
-// FirebaseAuthProvider.js
+
 import { createContext, useContext } from "react";
 import { app } from "./firebaseConfig";
 import {
@@ -14,7 +14,8 @@ const googleProvider = new GoogleAuthProvider();
 
 const FireBaseContext = createContext(null);
 
-// 🔐 Google Sign-in
+
+
 const signinByGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
@@ -30,7 +31,9 @@ const signinByGoogle = async () => {
   }
 };
 
-//  Email + Password Signup
+
+
+
 const signup = async (email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -46,7 +49,7 @@ const signup = async (email, password) => {
   }
 };
 
-//  Email + Password Signin
+
 const signin = async (email, password) => {
   try {
     const res = await signInWithEmailAndPassword(auth, email, password);

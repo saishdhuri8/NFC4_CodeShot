@@ -1,20 +1,42 @@
-
-import React from 'react'
-import UserContext from '../context/UserContext'
-import { useState } from 'react'
-
+import { useEffect, useState } from "react";
+import UserContext from "../context/UserContext";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../FireBase/FireBaseAuth";
+import axios from "axios";
 
 const UserContextProvider = ({ children }) => {
-    const [userId, setuserId] = useState(null)
-    
+
+  const [user, setUser] = useState(null);
 
 
-    return (
-        <UserContext.Provider value={{ userId, setuserId }}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: firebaseUser.displayName || "",
+          profilePic: firebaseUser.photoURL || "",
+        });
 
-export default UserContextProvider
+       //.......................extra data??
+
+      } else {
+        setUser(null);
+      }
+      setCheckingAuth(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ user, setUser, checkingAuth }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export default UserContextProvider;
