@@ -5,6 +5,8 @@ import express from 'express'
 import cors from "cors"
 import mongoConnect from './Config/mongoConnect.js';
 import codeRoutes from './Routes/code.js';
+import userRoutes from './Routes/userRoutes.js';
+import interviewRoutes from './Routes/interviewRoutes.js';
 
 
 
@@ -20,6 +22,9 @@ app.use(cors({
 app.use(express.json());
 
 app.use(codeRoutes);
+app.use(userRoutes);
+app.use(interviewRoutes)
+
 
 
 app.post("/",async(req,res)=>{

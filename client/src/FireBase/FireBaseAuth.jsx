@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup
 } from "firebase/auth";
+import { getSetUser } from "../APIS/user";
 
 export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -19,12 +20,14 @@ const FireBaseContext = createContext(null);
 const signinByGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
+    const res1=await getSetUser(res.user.uid,res.user.email,res.user.displayName || " ");
     return {
       userId: res.user.uid,
       email: res.user.email,
       profilePic: res.user.photoURL,
       name: res.user.displayName
     };
+    
   } catch (error) {
     console.error("Google Sign-in Error:", error);
     return false;
@@ -37,6 +40,7 @@ const signinByGoogle = async () => {
 const signup = async (email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
+    const res1=await getSetUser(res.user.uid,res.user.email,res.user.displayName || " ");
     return {
       userId: res.user.uid,
       email: res.user.email,
