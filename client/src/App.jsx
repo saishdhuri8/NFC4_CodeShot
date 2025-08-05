@@ -3,13 +3,14 @@ import Home from "./components/Home";
 import Auth from "./components/Auth/Auth";
 import { useContext } from "react";
 import UserContext from "./context/UserContext";
-import Code from "./Components/Code";
+
 import CodeEditor from "./Components/CodeEditor";
 import LandingPage from "./Components/LandingPage";
 import InterviewDashboard from "./Components/InterviewDashboard";
 import Whiteboard from "./Components/WhiteBoard";
 import Board from "./Components/Board";
 import InterviewRoom from "./components/InterviewRoom";
+
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -39,6 +40,7 @@ function App() {
       {user && (
         <>
           <Route path="/code" element={<CodeEditor />} />
+          
           <Route path="/interview-dashboard" element={<InterviewDashboard />} />
 
           <Route path="*" element={<Navigate to="/code" />} />
