@@ -30,7 +30,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/interview/<int:roomid>" element={<InterviewRoom/>} />
+          <Route path="/room/:roomId" element={<InterviewRoom/>} />
 
           <Route path="/wb" element={<Board/>} />
         </>

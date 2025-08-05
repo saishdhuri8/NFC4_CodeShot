@@ -14,11 +14,11 @@
     "@liveblocks/react": "^3.2.1",
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.11",
-<<<<<<< HEAD
+
     "autoprefixer": "^10.4.21",
-=======
+
     "@tldraw/tldraw": "^3.15.0",
->>>>>>> 782fec69713a17ca163abe00335dc56ce3097ea7
+
     "axios": "^1.11.0",
     "date-fns": "^4.1.0",
     "firebase": "^12.0.0",
