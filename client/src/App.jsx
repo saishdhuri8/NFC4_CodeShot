@@ -5,6 +5,7 @@ import { useContext } from "react";
 import UserContext from "./context/UserContext";
 import Code from "./Components/Code";
 import CodeEditor from "./Components/CodeEditor";
+import LandingPage from "./Components/LandingPage";
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -19,24 +20,22 @@ function App() {
 
   return (
     <Routes>
-      <Route
-        path="/auth"
-        element={user ? <Navigate to="/home" /> : <Auth />}
-      />
 
-      <Route
-        path="/home"
-        element={user ? <Home /> : <Navigate to="/auth" />}
-      />
-      <Route
-        path="/code"
-        element={user ? <CodeEditor/> : <Navigate to="/auth" />}
-      />
 
-      <Route
-        path="*"
-        element={<Navigate to={user ? "/home" : "/auth"} />}
-      />
+      {!user && (
+        <>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </>
+      )}
+      {user && (
+        <>
+          <Route path="/code" element={<CodeEditor />} />
+          <Route path="*" element={<Navigate to="/code" />} />
+        </>
+      )}
+
     </Routes>
   );
 }
