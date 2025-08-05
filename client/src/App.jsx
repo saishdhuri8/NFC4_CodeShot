@@ -3,9 +3,11 @@ import Home from "./components/Home";
 import Auth from "./components/Auth/Auth";
 import { useContext } from "react";
 import UserContext from "./context/UserContext";
-import Code from "./components/Code";
-import CodeEditor from "./components/CodeEditor";
-import LandingPage from "./components/LandingPage";
+import Code from "./Components/Code";
+import CodeEditor from "./Components/CodeEditor";
+import LandingPage from "./Components/LandingPage";
+import Whiteboard from "./Components/WhiteBoard";
+import Board from "./Components/Board";
 import InterviewRoom from "./components/InterviewRoom";
 
 function App() {
@@ -28,8 +30,9 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
-         <Route path="/interview/:roomId" element={<InterviewRoom />} />
-         
+          <Route path="/interview/<int:roomid>" element={<InterviewRoom/>} />
+
+          <Route path="/wb" element={<Board/>} />
         </>
       )}
       {user && (
