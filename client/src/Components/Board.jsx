@@ -6,7 +6,6 @@ import {
   LiveblocksProvider,
   RoomProvider,
 } from "@liveblocks/react/suspense";
-import CollaborativeCodeEditor from './CollaborativeCodeEditor';
 
 export default function Board() {
     return (
