@@ -9,6 +9,7 @@ import LandingPage from "./Components/LandingPage";
 import Whiteboard from "./Components/WhiteBoard";
 import Board from "./Components/Board";
 import InterviewRoom from "./components/InterviewRoom";
+import Editor from "./Components/Editor";
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -33,12 +34,18 @@ function App() {
           <Route path="/room/:roomId" element={<InterviewRoom/>} />
 
           <Route path="/wb" element={<Board/>} />
+          <Route path="/code" element={<Auth />} />
+          <Route path="/interview/" element={<InterviewRoom/>} />
+          <Route path="/editor/" element={<Editor/>} />
+          
         </>
       )}
       {user && (
         <>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/code" element={<CodeEditor />} />
           <Route path="*" element={<Navigate to="/code" />} />
+          <Route path="/wb" element={<Board/>} />
         </>
       )}
 
