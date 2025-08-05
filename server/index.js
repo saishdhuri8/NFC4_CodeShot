@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express'
 import cors from "cors"
 import mongoConnect from './Config/mongoConnect.js';
+import codeRoutes from './Routes/code.js';
 
 
 
@@ -18,12 +19,13 @@ app.use(cors({
 }));
 app.use(express.json());
 
-
+app.use(codeRoutes);
 
 
 app.post("/",async(req,res)=>{
   console.log(req.body);
   
+
   return res.json({message:"hiiii"})
 })
 

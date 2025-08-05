@@ -3,6 +3,8 @@ import Home from "./Components/Home";
 import Auth from "./Components/Auth/Auth";
 import { useContext } from "react";
 import UserContext from "./context/UserContext";
+import Code from "./Components/Code";
+import CodeEditor from "./Components/CodeEditor";
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -25,6 +27,10 @@ function App() {
       <Route
         path="/home"
         element={user ? <Home /> : <Navigate to="/auth" />}
+      />
+      <Route
+        path="/code"
+        element={user ? <CodeEditor/> : <Navigate to="/auth" />}
       />
 
       <Route
