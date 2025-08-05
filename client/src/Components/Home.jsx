@@ -1,23 +1,10 @@
-import React, { useContext } from 'react'
-import { Test } from '../APIS/test'
-import UserContext from '../context/UserContext'
+import React from 'react'
+import CollaborativeEditor from './CollaborativeEditor'
 
-const Home = () => {
-
-  const { user } = useContext(UserContext);
-  
-  
-
+export default function Home() {
   return (
-    <div>
-      you are at home
-      <br />
-      <button className='p-2 bg-amber-600 ' onClick={async (e) => { await Test() }}> click me</button>
-
-      
-
+    <div className='h-screen w-screen'>
+        <CollaborativeEditor/>
     </div>
   )
 }
-
-export default Home
