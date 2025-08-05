@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-export default function useSocket(serverUrl) {
+export default function useSocket(serverUrl ) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React from "react";
 import {motion} from "framer-motion";
 import CodeEditorAnimation from "./CodeEditorAnimation";
+import Navbar from "./Navbar";
 
 const LandingPage = () => {
   const features = [
@@ -82,20 +83,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Navigation */}
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-          CodeCollab
-        </div>
-        <div className="hidden md:flex space-x-8">
-          <a href="#" className="hover:text-blue-400 transition">Features</a>
-          <a href="#" className="hover:text-blue-400 transition">Pricing</a>
-          <a href="#" className="hover:text-blue-400 transition">Docs</a>
-          <a href="#" className="hover:text-blue-400 transition">Blog</a>
-        </div>
-        <button className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
-          Sign In
-        </button>
-      </nav>
+      <Navbar/>
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-20 text-center">
@@ -119,9 +107,9 @@ const LandingPage = () => {
             <button className="px-8 py-4 bg-blue-600 rounded-xl hover:bg-blue-700 transition font-medium text-lg shadow-lg hover:shadow-blue-500/30">
               Start Coding for Free
             </button>
-            <button className="px-8 py-4 border border-gray-600 rounded-xl hover:border-white transition font-medium text-lg bg-gray-900/50">
+            {/* <button className="px-8 py-4 border border-gray-600 rounded-xl hover:border-white transition font-medium text-lg bg-gray-900/50">
               See Demo →
-            </button>
+            </button> */}
           </div>
         </motion.div>
 

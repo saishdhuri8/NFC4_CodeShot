@@ -7,9 +7,9 @@ import UserContext from "./context/UserContext";
 import CodeEditor from "./Components/CodeEditor";
 import LandingPage from "./Components/LandingPage";
 import InterviewDashboard from "./Components/InterviewDashboard";
-import Whiteboard from "./Components/WhiteBoard";
 import Board from "./Components/Board";
 import InterviewRoom from "./components/InterviewRoom";
+import Editor from "./Components/Editor";
 
 
 function App() {
@@ -32,17 +32,24 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/interview/<int:roomid>" element={<InterviewRoom/>} />
+          <Route path="/room/:roomId" element={<InterviewRoom/>} />
 
           <Route path="/wb" element={<Board/>} />
+          <Route path="/code" element={<Auth />} />
+
+       
+          <Route path="/editor/" element={<Editor/>} />
+          
         </>
       )}
       {user && (
         <>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/code" element={<CodeEditor />} />
           
           <Route path="/interview-dashboard" element={<InterviewDashboard />} />
 
+          <Route path="/wb" element={<Board/>} />
           <Route path="*" element={<Navigate to="/code" />} />
         </>
       )}

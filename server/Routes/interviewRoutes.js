@@ -1,24 +1,9 @@
-// routes/interviews.js
 import { Router } from "express";
-import InterviewSpace from "../models/InterviewSpace.js"; // adjust path as needed
+import InterviewSpace from "../Schemas/InterviewSpaceModel.js"; // adjust path as needed
 import { randomUUID } from "crypto";
 
 const interviewRoutes = Router();
 
-/**
- * POST /api/interviews
- * Body (JSON) should match the InterviewSpace schema:
- * {
- *   ownerId, // ObjectId string
- *   title,
- *   scheduledAt, // ISO date string
- *   candidateId, // optional ObjectId string
- *   candidateEmail,
- *   invitedInterviewers: [{ userId, email }],
- *   dsaQuestions: [{ title, description, difficulty, testCases: [{input}], externalId }],
- *   // optional: videoRoomId, codeRoomId, whiteBoardRoom (will be auto-generated if not provided)
- * }
- */
 interviewRoutes.post("/interview-create", async (req, res) => {
   try {
     const payload = req.body;
