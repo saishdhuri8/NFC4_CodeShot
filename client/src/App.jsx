@@ -6,6 +6,8 @@ import UserContext from "./context/UserContext";
 import Code from "./Components/Code";
 import CodeEditor from "./Components/CodeEditor";
 import LandingPage from "./Components/LandingPage";
+import Whiteboard from "./Components/WhiteBoard";
+import Board from "./Components/Board";
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -27,6 +29,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/wb" element={<Board/>} />
         </>
       )}
       {user && (
