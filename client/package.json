@@ -12,13 +12,11 @@
   "dependencies": {
     "@liveblocks/client": "^3.2.1",
     "@liveblocks/react": "^3.2.1",
+    "@liveblocks/yjs": "^3.2.1",
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.11",
-<<<<<<< HEAD
-    "autoprefixer": "^10.4.21",
-=======
     "@tldraw/tldraw": "^3.15.0",
->>>>>>> 782fec69713a17ca163abe00335dc56ce3097ea7
+    "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "date-fns": "^4.1.0",
     "firebase": "^12.0.0",
@@ -35,6 +33,7 @@
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.11",
     "y-monaco": "^0.1.6",
+    "y-protocols": "^1.0.6",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27"
   },

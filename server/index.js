@@ -5,6 +5,7 @@ import express from 'express'
 import cors from "cors"
 import mongoConnect from './Config/mongoConnect.js';
 import codeRoutes from './Routes/code.js';
+import { sendNotificationEmail } from './utils/sendEmail.js';
 
 
 
@@ -25,8 +26,12 @@ app.use(codeRoutes);
 app.post("/",async(req,res)=>{
   console.log(req.body);
   
-
   return res.json({message:"hiiii"})
+})
+
+app.get("/email", (req, res) => {
+  sendNotificationEmail("Test Subject", "Hello! This is a test email to myself.");
+  res.send("Email page")
 })
 
 
