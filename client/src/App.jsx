@@ -1,11 +1,12 @@
 import { Routes, Route, Navigate } from "react-router";
-import Home from "./Components/Home";
-import Auth from "./Components/Auth/Auth";
+import Home from "./components/Home";
+import Auth from "./components/Auth/Auth";
 import { useContext } from "react";
 import UserContext from "./context/UserContext";
-import Code from "./Components/Code";
-import CodeEditor from "./Components/CodeEditor";
-import LandingPage from "./Components/LandingPage";
+import Code from "./components/Code";
+import CodeEditor from "./components/CodeEditor";
+import LandingPage from "./components/LandingPage";
+import InterviewRoom from "./components/InterviewRoom";
 
 function App() {
   const { user, checkingAuth } = useContext(UserContext);
@@ -27,6 +28,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
+         <Route path="/interview/:roomId" element={<InterviewRoom />} />
+         
         </>
       )}
       {user && (
