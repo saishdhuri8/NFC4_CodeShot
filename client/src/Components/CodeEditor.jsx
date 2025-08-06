@@ -1,9 +1,3 @@
-// src/Components/CodeEditor.jsx
-
-
-
-
-
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,13 +14,10 @@ import * as Y from "yjs";
 
 import { useParams } from "react-router";
 
-/* ------------------------- Replace with env vars in prod ------------------------- */
 const LIVEBLOCKS_PUBLIC_KEY = "pk_dev_HxqY-jDyORfYfSHSzxwyJbzZCAZQrHmnnT91EKWngA_jX0BkgOQJvknHaMX_7DeO";
 const GEMINI_API_KEY = "AIzaSyDbdAAQG7UBtiKJy591WYy2fi9ByKMJwk4";
-/* --------------------------------------------------------------------------------- */
 
 const CodeEditor = () => {
-
   const { roomId, initialPrompt } = useParams();
 
   const templates = {
@@ -50,7 +41,6 @@ int main() {
 }`,
   };
 
-  /* ------------------------ Inner editor (inside RoomProvider) ------------------------ */
   const EditorContent = ({ initialPrompt }) => {
     const [language, setLanguage] = useState("javascript");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -62,12 +52,10 @@ int main() {
     const [showQuestionModal, setShowQuestionModal] = useState(false);
     const [isInterviewer, setIsInterviewer] = useState(false);
 
-
     const updateMyPresence = useUpdateMyPresence();
     const others = useOthers();
     const room = useRoom();
 
-    // Yjs + WebRTC refs (optional peer-to-peer)
     const ydocRef = useRef(null);
     const webrtcRef = useRef(null);
 
@@ -94,7 +82,6 @@ int main() {
       };
     }, [roomId]);
 
-    // Liveblocks storage & mutations
     const problem = useStorage((root) => root.problem);
     const code = useStorage((root) => root.code);
 
@@ -107,27 +94,22 @@ int main() {
       []
     );
 
-    // presence init
     useEffect(() => {
       try {
         updateMyPresence({ isTyping: false });
       } catch (e) { }
     }, [updateMyPresence]);
 
-    // determine role from URL once
     useEffect(() => {
       const params = new URLSearchParams(window.location.search);
       setIsInterviewer(params.get("role") === "interviewer");
     }, []);
 
-    // ---------------------- Normalizers ----------------------
     const normalizeFieldToString = (v) => {
       if (v == null) return "";
       if (typeof v === "string") return v;
       if (typeof v === "number" || typeof v === "boolean") return String(v);
-      // For objects/arrays, pretty-print compactly
       try {
-        // If it's an array of strings, join them
         if (Array.isArray(v) && v.every((it) => typeof it === "string")) {
           return v.join("\n");
         }
@@ -145,11 +127,9 @@ int main() {
           return normalizeFieldToString(item);
         });
       }
-      // single string or object -> wrap into array-of-strings
       return [normalizeFieldToString(r)];
     };
 
-    // ---------------------- Gemini fetching helper ----------------------
     const fetchQuestionFromPrompt = useCallback(
       async (prompt) => {
         if (!prompt || !prompt.trim()) {
@@ -184,13 +164,11 @@ int main() {
 
           if (!content) throw new Error("No content returned from Gemini");
 
-          // Extract the first {...} block (safe-ish)
           const jsonMatch = content.match(/\{[\s\S]*\}/);
           if (!jsonMatch) throw new Error("Gemini response did not contain JSON");
 
           const parsed = JSON.parse(jsonMatch[0]);
 
-          // Normalize fields (defensive)
           const newProblem = {
             title: normalizeFieldToString(parsed.title || "Untitled problem"),
             description: normalizeFieldToString(parsed.description || ""),
@@ -199,10 +177,7 @@ int main() {
             sampleOutput: normalizeFieldToString(parsed.sampleOutput || ""),
           };
 
-          // Update Liveblocks storage
           updateProblem(newProblem);
-
-          // Reset code template to selected language
           updateCode(templates[language] || templates.javascript);
 
           return newProblem;
@@ -217,14 +192,12 @@ int main() {
       [language, updateProblem, updateCode, templates]
     );
 
-    // If initialPrompt exists, fetch a question on mount
     useEffect(() => {
       if (candidatePrompt && candidatePrompt.trim()) {
         fetchQuestionFromPrompt(candidatePrompt).catch(() => { });
       }
     }, [candidatePrompt, fetchQuestionFromPrompt]);
 
-    // Manual generation (modal) uses the same helper
     const generateQuestion = useCallback(async () => {
       try {
         await fetchQuestionFromPrompt(candidatePrompt);
@@ -234,43 +207,83 @@ int main() {
       }
     }, [candidatePrompt, fetchQuestionFromPrompt]);
 
-    // Mock analyzer (unchanged)
     const handleAnalyzeCode = async () => {
       setIsAnalyzing(true);
       setAnalysisResult(null);
       setError(null);
+      
       try {
-        await new Promise((r) => setTimeout(r, 1500));
-        setAnalysisResult({
-          timeComplexity: "O(n)",
-          spaceComplexity: "O(1)",
-          efficiencyScore: Math.floor(Math.random() * 5) + 5,
-          comment: "The solution looks efficient. Consider edge cases like empty input.",
-        });
+        const prompt = `
+        Analyze this ${language} code for technical interviews. Provide ONLY a JSON response with these fields:
+        {
+          "timeComplexity": "O(n) notation",
+          "spaceComplexity": "O(n) notation", 
+          "efficiencyScore": 1-10,
+          "comment": "Brief feedback"
+        }
+        Code to analyze:
+        ${code || ''}
+        `;
+
+        const resp = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                {
+                  parts: [
+                    { text: prompt },
+                  ],
+                },
+              ],
+            }),
+          }
+        );
+
+        const data = await resp.json();
+        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!content) throw new Error("No analysis returned");
+
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error("Invalid analysis format");
+
+        const parsed = JSON.parse(jsonMatch[0]);
+
+        const result = {
+          timeComplexity: parsed.timeComplexity || "Unknown",
+          spaceComplexity: parsed.spaceComplexity || "Unknown",
+          efficiencyScore: Math.min(10, Math.max(1, 
+            typeof parsed.efficiencyScore === 'number' 
+              ? parsed.efficiencyScore 
+              : 5
+          )),
+          comment: parsed.comment || "No specific feedback provided",
+        };
+
+        setAnalysisResult(result);
       } catch (err) {
-        setError(`Failed to analyze code: ${err?.message || err}`);
+        setError(`Analysis failed: ${err.message}`);
       } finally {
         setIsAnalyzing(false);
       }
     };
 
-    // ------------------------------ Safe render helpers ------------------------------
     const renderMaybeMultiline = (value) => {
       if (value == null || value === "") return null;
       const s = String(value);
-      // if it looks like JSON (starts with { or [) or contains newline, render in <pre>
       if (s.trim().startsWith("{") || s.trim().startsWith("[") || s.includes("\n")) {
         return <pre className="whitespace-pre-wrap text-sm text-gray-300">{s}</pre>;
       }
       return <span>{s}</span>;
     };
 
-    // ------------------------------ UI (kept identical) ------------------------------
     return (
       <div className="bg-[#0a0a0a] text-white min-h-screen">
         <div className="p-4">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Problem Section */}
             <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-[#2a2a2a] overflow-hidden">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -352,9 +365,7 @@ int main() {
               </div>
             </div>
 
-            {/* Code Editor Section */}
             <div className="space-y-4">
-              {/* Editor Controls */}
               <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-[#2a2a2a] p-4">
                 <div className="flex justify-between items-center">
                   <select
@@ -412,7 +423,6 @@ int main() {
                 </div>
               </div>
 
-              {/* Monaco Editor */}
               <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-[#2a2a2a] overflow-hidden" style={{ height: "300px" }}>
                 <Editor
                   height="100%"
@@ -436,7 +446,6 @@ int main() {
                 />
               </div>
 
-              {/* Analysis Results */}
               <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-[#2a2a2a] p-4">
                 <h3 className="font-semibold text-lg mb-3 text-white">Analysis Results</h3>
                 <div className="bg-[#252525] rounded-lg p-4 min-h-32 max-h-96 overflow-y-auto">
@@ -493,7 +502,6 @@ int main() {
           </div>
         </div>
 
-        {/* Question Modal */}
         <AnimatePresence>
           {showQuestionModal && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" onClick={() => setShowQuestionModal(false)}>
@@ -526,8 +534,6 @@ int main() {
     );
   };
 
-  /* ----------------------- Top-level providers ----------------------- */
-  // NOTE: initialStorage.problem is minimal/empty — Gemini will populate it from initialPrompt
   return (
     <LiveblocksProvider publicApiKey={LIVEBLOCKS_PUBLIC_KEY}>
       <RoomProvider
