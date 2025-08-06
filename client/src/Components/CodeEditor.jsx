@@ -20,8 +20,10 @@ const LIVEBLOCKS_PUBLIC_KEY = "pk_dev_HxqY-jDyORfYfSHSzxwyJbzZCAZQrHmnnT91EKWngA
 const GEMINI_API_KEY = "AIzaSyDbdAAQG7UBtiKJy591WYy2fi9ByKMJwk4";
 /* --------------------------------------------------------------------------------- */
 
-const CodeEditor = ({ roomId = "69", initialPrompt = "give me a code for dynamic programming" }) => {
-  
+const CodeEditor = () => {
+
+  const { roomId, initialPrompt } = useParams();
+
   const templates = {
     javascript: `function solution() {
   // Write your solution here
@@ -54,8 +56,8 @@ int main() {
     const [isGeneratingQuestion, setIsGeneratingQuestion] = useState(false);
     const [showQuestionModal, setShowQuestionModal] = useState(false);
     const [isInterviewer, setIsInterviewer] = useState(false);
-    
-    
+
+
     const updateMyPresence = useUpdateMyPresence();
     const others = useOthers();
     const room = useRoom();
@@ -104,7 +106,7 @@ int main() {
     useEffect(() => {
       try {
         updateMyPresence({ isTyping: false });
-      } catch (e) {}
+      } catch (e) { }
     }, [updateMyPresence]);
 
     // determine role from URL once
@@ -213,7 +215,7 @@ int main() {
     // If initialPrompt exists, fetch a question on mount
     useEffect(() => {
       if (candidatePrompt && candidatePrompt.trim()) {
-        fetchQuestionFromPrompt(candidatePrompt).catch(() => {});
+        fetchQuestionFromPrompt(candidatePrompt).catch(() => { });
       }
     }, [candidatePrompt, fetchQuestionFromPrompt]);
 

@@ -31,51 +31,40 @@ function App() {
       {!user && (
         <>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/start" element={<Auth />} />
+
+          {/* <Route path="/start" element={<Auth />} /> */}
+
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
 
-<<<<<<< HEAD
-          <Route path="/wb" element={<Board />} />
-          <Route path="/code" element={<Auth />} />
+          {/* <Route path="/wb" element={<Board />} /> */}
+          {/* <Route path="/code" element={<Auth />} /> */}
 
 
           <Route path="/editor/" element={<Editor />} />
 
-=======
-          <Route path="/wb" element={<Board/>} />
+          {/* <Route path="/wb" element={<Board/>} /> */}
           <Route path="/code" element={<CodeEditor />} />
-          <Route path="/interview" element={<InterviewRoom/>} />
-          <Route path="/editor/" element={<Editor/>} />
-          
->>>>>>> 5cf39924b596ae4e4a6465721ce2c4a862fdee06
+          <Route path="/interview" element={<InterviewRoom />} />
+          <Route path="/editor/" element={<Editor />} />
+
         </>
       )}
       {user && (
         <>
-<<<<<<< HEAD
           {/* <Route path="/" element={<LandingPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/room/:roomId" element={<InterviewRoom />} />
 
-=======
-          <Route path="/start" element={<CodeEditor />} />
+          {/* <Route path="/start" element={<CodeEditor />} /> */}
           <Route path="/" element={<LandingPage />} />
->>>>>>> 5cf39924b596ae4e4a6465721ce2c4a862fdee06
           <Route path="/code" element={<CodeEditor />} />
 
           <Route path="/interview-dashboard" element={<InterviewDashboard />} />
 
-          <Route path="/wb" element={<Board />} />
+          {/* <Route path="/wb" element={<Board />} /> */}
           <Route path="*" element={<Navigate to="/dashboard" />} />
-
-
-          <Route path="/test" element={<CodeEditor
-            roomId="123"
-            initialPrompt="Generate a basic string problem"
-          />} />
-
-
+          <Route path="/test/:roomId/:initialPrompt" element={<CodeEditor />} />
         </>
       )}
 
