@@ -29,17 +29,19 @@ function App() {
       {!user && (
         <>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/start" element={<Auth />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/wb" element={<Board/>} />
-          <Route path="/code" element={<Auth />} />
-          <Route path="/interview/" element={<InterviewRoom/>} />
+          <Route path="/code" element={<CodeEditor />} />
+          <Route path="/interview" element={<InterviewRoom/>} />
           <Route path="/editor/" element={<Editor/>} />
           
         </>
       )}
       {user && (
         <>
+          <Route path="/start" element={<CodeEditor />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/code" element={<CodeEditor />} />
           <Route path="*" element={<Navigate to="/code" />} />

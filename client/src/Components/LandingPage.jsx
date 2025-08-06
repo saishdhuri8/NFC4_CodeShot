@@ -2,6 +2,7 @@ import React from "react";
 import {motion} from "framer-motion";
 import CodeEditorAnimation from "./CodeEditorAnimation";
 import Navbar from "./Navbar";
+import { Link } from "react-router";
 
 const LandingPage = () => {
   const features = [
@@ -104,9 +105,9 @@ const LandingPage = () => {
             Share, edit, and debug code together from anywhere in the world.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="px-8 py-4 bg-blue-600 rounded-xl hover:bg-blue-700 transition font-medium text-lg shadow-lg hover:shadow-blue-500/30">
+            <Link to="/start" className="px-8 py-4 bg-blue-600 rounded-xl hover:bg-blue-700 transition font-medium text-lg shadow-lg hover:shadow-blue-500/30">
               Start Coding for Free
-            </button>
+            </Link>
             {/* <button className="px-8 py-4 border border-gray-600 rounded-xl hover:border-white transition font-medium text-lg bg-gray-900/50">
               See Demo →
             </button> */}
