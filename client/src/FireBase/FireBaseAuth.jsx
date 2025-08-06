@@ -6,7 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signOut
 } from "firebase/auth";
 import { getSetUser } from "../APIS/user";
 
@@ -70,7 +71,7 @@ const signin = async (email, password) => {
 
 export const FireBaseAuthProvider = ({ children }) => {
   return (
-    <FireBaseContext.Provider value={{ signin, signup, signinByGoogle }}>
+    <FireBaseContext.Provider value={{ signOut,signin, signup, signinByGoogle }}>
       {children}
     </FireBaseContext.Provider>
   );
