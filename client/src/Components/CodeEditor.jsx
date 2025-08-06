@@ -1,4 +1,9 @@
 // src/Components/CodeEditor.jsx
+
+
+
+
+
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { motion, AnimatePresence } from "framer-motion";
