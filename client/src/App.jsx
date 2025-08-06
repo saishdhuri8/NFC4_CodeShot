@@ -32,6 +32,8 @@ function App() {
           <Route path="/start" element={<Auth />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/room/:roomId" element={<InterviewRoom/>} />
+
           <Route path="/wb" element={<Board/>} />
           <Route path="/code" element={<CodeEditor />} />
           <Route path="/interview" element={<InterviewRoom/>} />
