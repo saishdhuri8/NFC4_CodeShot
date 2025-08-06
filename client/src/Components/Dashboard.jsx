@@ -45,6 +45,9 @@ const Dashboard = () => {
     const [isScheduling, setIsScheduling] = useState(false);
 
     const { user } = useContext(UserContext);
+
+    console.log(user);
+    
     const navigate = useNavigate();
 
     // -------------------------
@@ -184,7 +187,7 @@ const Dashboard = () => {
                     <div className="flex items-center gap-4">
                         <div className="text-sm text-gray-400 hidden md:block">Welcome, {user?.name || "Saish"}</div>
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="cursor-pointer">
-                            <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "Saish Dhuri")}&background=0D8ABC&color=fff`} alt="User avatar" className="w-9 h-9 rounded-full border-2 border-blue-800 shadow" />
+                            <img src={ user.profilePic } alt="User avatar" className="w-9 h-9 rounded-full border-2 border-blue-800 shadow" />
                         </motion.div>
                     </div>
                 </motion.header>

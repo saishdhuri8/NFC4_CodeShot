@@ -13,6 +13,8 @@ const UserContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log(firebaseUser);
+      
       if (firebaseUser) {
         setUser({
           uid: firebaseUser.uid,
