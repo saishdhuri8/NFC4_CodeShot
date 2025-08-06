@@ -7,6 +7,7 @@ const client = createClient({
 
 // Make sure these are all exported
 export const {
+  
   RoomProvider,
   useRoom,
   useMyPresence,
@@ -14,7 +15,7 @@ export const {
   useSelf,
   useOthers,
   useBroadcastEvent,
-  useEventListener, // THIS IS THE CRUCIAL ONE
+  useEventListener, 
   useStorage,
   useMutation,
 } = createRoomContext(client);

@@ -10,6 +10,7 @@ import InterviewDashboard from "./Components/InterviewDashboard";
 import Board from "./Components/Board";
 import InterviewRoom from "./components/InterviewRoom";
 import Editor from "./Components/Editor";
+import Dashboard from "./Components/Dashboard";
 
 
 function App() {
@@ -32,25 +33,35 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/room/:roomId" element={<InterviewRoom/>} />
 
-          <Route path="/wb" element={<Board/>} />
+          <Route path="/wb" element={<Board />} />
           <Route path="/code" element={<Auth />} />
 
-       
-          <Route path="/editor/" element={<Editor/>} />
-          
+
+          <Route path="/editor/" element={<Editor />} />
+
         </>
       )}
       {user && (
         <>
-          <Route path="/" element={<LandingPage />} />
+          {/* <Route path="/" element={<LandingPage />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/room/:roomId" element={<InterviewRoom />} />
+
           <Route path="/code" element={<CodeEditor />} />
-          
+
           <Route path="/interview-dashboard" element={<InterviewDashboard />} />
 
-          <Route path="/wb" element={<Board/>} />
-          <Route path="*" element={<Navigate to="/code" />} />
+          <Route path="/wb" element={<Board />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+
+
+          <Route path="/test" element={<CodeEditor
+            roomId="123"
+            initialPrompt="Generate a basic string problem"
+          />} />
+
+
         </>
       )}
 
