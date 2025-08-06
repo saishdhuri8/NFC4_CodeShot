@@ -3,6 +3,8 @@ import { getYjsProviderForRoom } from "@liveblocks/yjs";
 import { Editor } from "@monaco-editor/react";
 import { MonacoBinding } from "y-monaco";
 import { useEffect, useState, useRef } from "react";
+import { Tldraw } from "@tldraw/tldraw";
+import "@tldraw/tldraw/tldraw.css";
 
 export function CollaborativeEditor({ onShareClick }) {
   const [editorRef, setEditorRef] = useState(null);
@@ -18,6 +20,7 @@ export function CollaborativeEditor({ onShareClick }) {
   const yProvider = getYjsProviderForRoom(room);
   const outputRef = useRef(null);
   const chatRef = useRef(null);
+  const [showWhiteboard, setShowWhiteboard] = useState(false);
 
   // Set up Yjs binding for collaboration
   useEffect(() => {
@@ -193,30 +196,42 @@ export function CollaborativeEditor({ onShareClick }) {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            {!showWhiteboard && (
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-400">Language:</span>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="bg-gray-700 text-white px-3 py-1 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.value} value={lang.value}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="flex items-center space-x-2">
-              <span className="text-gray-400">Language:</span>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="bg-gray-700 text-white px-3 py-1 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <button
+                onClick={() => setShowWhiteboard(!showWhiteboard)}
+                className={`text-sm px-3 py-1 rounded-md font-medium ${
+                  showWhiteboard 
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+                }`}
               >
-                {languages.map((lang) => (
-                  <option key={lang.value} value={lang.value}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-center space-x-2">
+                {showWhiteboard ? 'Show Editor' : 'Show Whiteboard'}
+              </button>
               <div className="text-sm bg-gray-700 px-3 py-1 rounded-full flex items-center">
                 <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                <span>Room: {room.id}</span>
+                <span>{room.id}</span>
               </div>
               <button
                 onClick={onShareClick}
                 className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
               >
-                Share
+                Share Room Name
               </button>
             </div>
           </div>
@@ -225,89 +240,106 @@ export function CollaborativeEditor({ onShareClick }) {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Editor + Output Column */}
+        {/* Editor/Whiteboard + Output Column */}
         <div className="flex-1 flex flex-col container mx-auto p-4 space-y-4 overflow-hidden">
-          {/* Editor Section */}
-          <div className="flex-1 flex flex-col bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
-            <div className="flex justify-between items-center bg-gray-750 px-4 py-2 border-b border-gray-700">
-              <h2 className="font-medium text-gray-300">Editor</h2>
-              <div className="flex space-x-2">
-                <button
-                  onClick={runCode}
-                  disabled={isRunning}
-                  className={`px-4 py-1 rounded-md font-medium flex items-center ${
-                    isRunning
-                      ? 'bg-gray-600 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white'
-                  }`}
-                >
-                  {isRunning ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Executing...
-                    </>
-                  ) : (
-                    'Run Code'
-                  )}
-                </button>
-                <button
-                  onClick={clearOutput}
-                  className="px-4 py-1 bg-gray-700 hover:bg-gray-600 rounded-md font-medium text-gray-300"
-                >
-                  Clear Output
-                </button>
+          {showWhiteboard ? (
+            <div className="flex-1 bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700 relative">
+  <div className="flex justify-between items-center bg-gray-750 px-4 py-2 border-b border-gray-700">
+    <h2 className="font-medium text-gray-300">Whiteboard</h2>
+  </div>
+  <div className="absolute inset-0" style={{ top: '40px', bottom: 0 }}>
+    <Tldraw
+      showMenu={true}
+      showTools={true}
+      persistenceKey="tldraw-liveblocks"
+    />
+  </div>
+</div>
+          ) : (
+            <>
+              {/* Editor Section */}
+              <div className="flex-1 flex flex-col bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+                <div className="flex justify-between items-center bg-gray-750 px-4 py-2 border-b border-gray-700">
+                  <h2 className="font-medium text-gray-300">Editor</h2>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={runCode}
+                      disabled={isRunning}
+                      className={`px-4 py-1 rounded-md font-medium flex items-center ${
+                        isRunning
+                          ? 'bg-gray-600 cursor-not-allowed'
+                          : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      }`}
+                    >
+                      {isRunning ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Executing...
+                        </>
+                      ) : (
+                        'Run Code'
+                      )}
+                    </button>
+                    <button
+                      onClick={clearOutput}
+                      className="px-4 py-1 bg-gray-700 hover:bg-gray-600 rounded-md font-medium text-gray-300"
+                    >
+                      Clear Output
+                    </button>
+                  </div>
+                </div>
+                <div className="flex-1 relative">
+                  {renderCollaboratorCursors()}
+                  <Editor
+                    height="100%"
+                    theme="vs-dark"
+                    language={language}
+                    defaultValue="// Welcome to CodeCollab!\n// Write code here and click 'Run Code'\n// All collaborators will see the execution results\n\nconsole.log('Hello World!');\n\nfunction example() {\n  return 'This code runs in real-time!';\n}\n\nexample();"
+                    onMount={(editor) => setEditorRef(editor)}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      automaticLayout: true,
+                      wordWrap: "on",
+                      padding: { top: 15 },
+                      renderWhitespace: "selection",
+                      cursorStyle: "block-outline",
+                      mouseStyle: "text",
+                    }}
+                    beforeMount={(monaco) => {
+                      monaco.editor.defineTheme('custom-dark', {
+                        base: 'vs-dark',
+                        inherit: true,
+                        rules: [],
+                        colors: {
+                          'editor.background': '#1F2937',
+                        },
+                      });
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex-1 relative">
-              {renderCollaboratorCursors()}
-              <Editor
-                height="100%"
-                theme="vs-dark"
-                language={language}
-                defaultValue="// Welcome to CodeCollab!\n// Write code here and click 'Run Code'\n// All collaborators will see the execution results\n\nconsole.log('Hello World!');\n\nfunction example() {\n  return 'This code runs in real-time!';\n}\n\nexample();"
-                onMount={(editor) => setEditorRef(editor)}
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  automaticLayout: true,
-                  wordWrap: "on",
-                  padding: { top: 15 },
-                  renderWhitespace: "selection",
-                  cursorStyle: "block-outline",
-                  mouseStyle: "text",
-                }}
-                beforeMount={(monaco) => {
-                  monaco.editor.defineTheme('custom-dark', {
-                    base: 'vs-dark',
-                    inherit: true,
-                    rules: [],
-                    colors: {
-                      'editor.background': '#1F2937',
-                    },
-                  });
-                }}
-              />
-            </div>
-          </div>
 
-          {/* Output Section */}
-          <div className="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
-            <div className="flex justify-between items-center bg-gray-750 px-4 py-2 border-b border-gray-700">
-              <h2 className="font-medium text-gray-300">Output</h2>
-              <div className="text-xs text-gray-400">
-                {new Date().toLocaleTimeString()}
+              {/* Output Section */}
+              <div className="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+                <div className="flex justify-between items-center bg-gray-750 px-4 py-2 border-b border-gray-700">
+                  <h2 className="font-medium text-gray-300">Output</h2>
+                  <div className="text-xs text-gray-400">
+                    {new Date().toLocaleTimeString()}
+                  </div>
+                </div>
+                <pre
+                  ref={outputRef}
+                  className="p-4 bg-gray-850 text-gray-200 font-mono text-sm h-40 overflow-y-auto whitespace-pre-wrap"
+                >
+                  {output || "Execution results will appear here..."}
+                </pre>
               </div>
-            </div>
-            <pre
-              ref={outputRef}
-              className="p-4 bg-gray-850 text-gray-200 font-mono text-sm h-40 overflow-y-auto whitespace-pre-wrap"
-            >
-              {output || "Execution results will appear here..."}
-            </pre>
-          </div>
+            </>
+          )}
         </div>
 
         {/* Chat Sidebar */}

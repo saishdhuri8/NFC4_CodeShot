@@ -39,44 +39,44 @@ export default function EditorWrapper() {
   };
 
   const copyRoomLink = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("room", activeRoom);
-    navigator.clipboard.writeText(url.toString());
-    setShowShareModal(false);
-  };
+  navigator.clipboard.writeText(activeRoom);
+  setShowShareModal(false);
+};
 
   if (activeRoom) {
     return (
       <RoomProvider id={activeRoom} initialPresence={{}}>
-        <div className="flex flex-col h-screen bg-gray-50">
+        <div className="flex flex-col h-screen min-h-screen bg-gray-950 text-white">
           <Navbar />
-          <CollaborativeEditor 
-            roomId={activeRoom} 
+          <CollaborativeEditor
+            roomId={activeRoom}
             onShareClick={() => setShowShareModal(true)}
           />
-          
+
           {/* Share Modal */}
           {showShareModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white p-6 rounded-lg max-w-md w-full">
-                <h3 className="text-xl font-bold mb-4">Share Room</h3>
+              <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full border border-gray-700">
+                <h3 className="text-xl font-bold mb-4 text-white">
+                  Share Room
+                </h3>
                 <div className="flex items-center mb-4">
                   <input
                     type="text"
-                    value={`${window.location.origin}${window.location.pathname}?room=${activeRoom}`}
+                    value={activeRoom}
                     readOnly
-                    className="flex-1 p-2 border rounded-l"
+                    className="flex-1 p-2 border border-gray-600 rounded-l bg-gray-700 text-white"
                   />
                   <button
                     onClick={copyRoomLink}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-r"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r"
                   >
                     Copy
                   </button>
                 </div>
                 <button
                   onClick={() => setShowShareModal(false)}
-                  className="w-full bg-gray-200 hover:bg-gray-300 py-2 rounded"
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded"
                 >
                   Close
                 </button>
@@ -94,7 +94,9 @@ export default function EditorWrapper() {
       <div className="container mx-auto px-4 py-12 flex flex-col items-center">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">CodeCollab</h1>
-          <p className="text-lg text-gray-600">Real-time collaborative code editor</p>
+          <p className="text-lg text-gray-600">
+            Real-time collaborative code editor
+          </p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
@@ -114,7 +116,10 @@ export default function EditorWrapper() {
 
             <form onSubmit={joinRoom} className="space-y-3">
               <div>
-                <label htmlFor="roomId" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="roomId"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Join existing room
                 </label>
                 <input
